@@ -156,6 +156,8 @@ function (ui, css, mustache, dockTemplate) {
 		var container = offscreen.firstChild;
 		document.querySelector("#dock menu").insertAdjacentElement("beforeEnd", container);
 		container.querySelector(".tab").addEventListener("click", function (event) {
+			event.preventDefault();
+			event.stopPropagation();
 			if (api.toggle) {
 				if (api.visible) {
 					api.active = false;
