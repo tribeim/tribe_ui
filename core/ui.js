@@ -1,5 +1,5 @@
 ﻿define(
-["core/paths", "core/css", "libraries/mustache", "text!templates/ui.mustache"],
+["core/paths", "core/css", "libraries/mustache", "text!templates/ui.html"],
 function (paths, css, mustache, uiTemplate) {
 
 	css.load("core/ui");

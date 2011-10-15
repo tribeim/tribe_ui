@@ -1,5 +1,5 @@
 ﻿define(
-["core/paths", "core/events", "core/ui/content", "core/css", "libraries/mustache", "text!templates/search.mustache"],
+["core/paths", "core/events", "core/ui/content", "core/css", "libraries/mustache", "text!templates/search.html"],
 function (paths, events, content, css, mustache, searchTemplate) {
 	css.load("modules/search");
 	document.querySelector("#menubar").insertAdjacentHTML("afterEnd", mustache.to_html(searchTemplate));
@@ -12,7 +12,7 @@ function (paths, events, content, css, mustache, searchTemplate) {
 	var resultsElement = null;
 	var resultsListener = function (payload) {
 		clearPending();
-		require(["text!templates/searchResults.mustache"], function (searchResultsTemplate) {
+		require(["text!templates/searchResults.html"], function (searchResultsTemplate) {
 			var html = mustache.to_html(searchResultsTemplate, payload);
 			if (resultsElement) {
 				resultsElement.insertAdjacentHTML("beforeEnd", html);
@@ -30,7 +30,7 @@ function (paths, events, content, css, mustache, searchTemplate) {
 		path: /^search/,
 		open: function (path, element) {
 			css.load("modules/searchPage");
-			require(["text!templates/searchPage.mustache"], function (searchPageTemplate) {
+			require(["text!templates/searchPage.html"], function (searchPageTemplate) {
 				var queryString = path.substring(7);
 				element.insertAdjacentHTML("afterBegin", mustache.to_html(searchPageTemplate, {query: queryString}));
 				resultsElement = element.querySelector("#search-results-list");

@@ -11,7 +11,7 @@
  *	Example:
  *		Loading a CSS file and Mustache template with data objects.
  *
- *		Template file "myForm.mustache"
+ *		Template file "myForm.html"
  *		(code)
  *		<h1>{{header}}</h1>
  *		{{#items}}
@@ -42,7 +42,7 @@
  *			css: "customDialog", // "customDialog.css"
  *			container: "#myDialog",
  *			position: "afterBegin",
- *			source: "myForm" // "myForm.mustache"
+ *			source: "myForm" // "myForm.html"
  *			data: jsonData
  *		}, function (html, container) {
  *			// do something with container or html
@@ -54,7 +54,7 @@
  *
  *	Properties:
  *		(String) css - Path to a Cascading Style Sheet. The ".css" extension is optional.
- *		(String) source - Path to a Mustache template file. The ".mustache" extension is optional.
+ *		(String) source - Path to a Mustache template file. The ".html" extension is optional.
  *		(Object) data - Map of keys/values for the template parser.
  *		(Element|String) container - The HTML element (Element) or CSS selector (String) to receive the HTML output.
  *		(String) position - Location relative to the container to insert the HTML.
@@ -78,8 +78,8 @@ define(function () {
 			});
 		}
 		if ("source" in settings) {
-			if (settings.source.substr(settings.source.length - 9) !== ".mustache") {
-				settings.source += ".mustache";
+			if (settings.source.substr(settings.source.length - 9) !== ".html") {
+				settings.source += ".html";
 			}
 			require(
 				["libraries/mustache", "text!templates/" + settings.source],

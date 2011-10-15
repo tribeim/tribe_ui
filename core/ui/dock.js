@@ -1,5 +1,5 @@
 ﻿define(
-["core/ui", "core/css", "libraries/mustache", "text!templates/dock.mustache"],
+["core/ui", "core/css", "libraries/mustache", "text!templates/dock.html"],
 function (ui, css, mustache, dockTemplate) {
 	var setValue = function (element, value) {
 			if (typeof value === "string") {
