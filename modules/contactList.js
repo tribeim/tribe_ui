@@ -108,7 +108,7 @@ function (events, dock, roster, template, settings) {
 			});
 			// Remove from old groups
 			Object.keys(htmlCache).filter(function (group) {
-				return htmlCache[group].hasOwnProperty(jid) &&
+				return Object.hasOwnProperty.call(htmlCache[group], jid) &&
 					(changedContacts[jid].groups.indexOf(group) === -1);
 			}).forEach(function (group) {
 				removeContactFromCache(group, jid);

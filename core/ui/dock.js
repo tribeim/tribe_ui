@@ -173,7 +173,7 @@ function (ui, css, mustache, dockTemplate) {
 			}
 		}, false);
 		Object.keys(defaults).forEach(function (key) {
-			if (descriptor.hasOwnProperty(key)) {
+			if (Object.hasOwnProperty.call(descriptor, key)) {
 				api[key] = descriptor[key];
 			} else {
 				api[key] = defaults[key];

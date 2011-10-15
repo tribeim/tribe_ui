@@ -24,9 +24,9 @@
 			uri = handler.xmlns(prefix);
 		}
 		if (uri === null) {
-			if (handler.xmlns && handler.xmlns.hasOwnProperty(prefix)) {
+			if (handler.xmlns && Object.hasOwnProperty.call(handler.xmlns, prefix)) {
 				uri = handler.xmlns[prefix];
-			} else if (xpathXmlns.hasOwnProperty(prefix)) {
+			} else if (Object.hasOwnProperty.call(xpathXmlns, prefix)) {
 				uri = xpathXmlns[prefix];
 			}
 		}
@@ -59,7 +59,7 @@
 		filter: function (stanza) {
 			var id = stanza.getAttributeNS("", "id");
 			return (stanza.tagName === "iq" // IQ stanza
-				&& id !== null && id !== "" && iqCallbacks.hasOwnProperty(id) // Match the ID attribute
+				&& id !== null && id !== "" && Object.hasOwnProperty.call(iqCallbacks, id) // Match the ID attribute
 				&& iqCallbacks[id].from.indexOf(stanza.getAttributeNS("", "from")) !== -1 // Match the from address
 				&& iqCallbacks[id].type.indexOf(stanza.getAttributeNS("", "type")) !== -1 // Match the response type
 			);
@@ -143,9 +143,8 @@
 			if (callback instanceof Function) {
 				var id = iq.getAttributeNS("", "id");
 				if (id === null || id === "") {
-					do {
-						id = Math.floor(Math.random() * 0xffffffff).toString(16);
-					} while (iqCallbacks.hasOwnProperty(id));
+					do { id = Math.floor(Math.random() * 0xffffffff).toString(16); }
+					while (Object.hasOwnProperty.call(iqCallbacks, id));
 					iq.setAttribute("id", id);
 				}
 				iqCallbacks[id] = {

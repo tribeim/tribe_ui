@@ -192,11 +192,13 @@ function (events, xmpp, xpath, rosterCache, jidParser) {
 		callback: function (presence) {
 			var jid = jidParser(presence.getAttribute("from"));
 			if (jid && Object.hasOwnProperty.call(roster.contacts, jid.bare)) {
-				var contact = roster.contacts[jid.bare];
-				var resource = Object.hasOwnProperty.call(contact.resources, jid.resource) ?
-								contact.resources[jid.resource] :
-								(contact.resources[jid.resource] = {});
-				var type = presence.hasAttribute("type") ? presence.getAttribute("type") : "";
+				var contact = roster.contacts[jid.bare],
+					resource = Object.hasOwnProperty.call(contact.resources, jid.resource)
+						? contact.resources[jid.resource]
+						: (contact.resources[jid.resource] = {}),
+					type = presence.hasAttribute("type")
+						? presence.getAttribute("type")
+						: "";
 				switch (type) {
 					case "": // Available is indicated by lack of "type" attribute
 						["show", "status", "priority"].forEach(function (tagName) {
@@ -255,8 +257,9 @@ function (events, xmpp, xpath, rosterCache, jidParser) {
 					contact[property] = item.getAttribute(property) || "";
 				});
 				contact.groups = [];
-				contact.resources = Object.hasOwnProperty.call(roster.contacts, jid) ?
-									roster.contacts[jid].resources : {};
+				contact.resources = Object.hasOwnProperty.call(roster.contacts, jid)
+					? roster.contacts[jid].resources
+					: {};
 				xpath(item, "roster:group", Array, xmlns).forEach(function (group) {
 					if (contact.groups.indexOf(group.textContent) === -1) {
 						contact.groups.push(group.textContent);

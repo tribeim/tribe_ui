@@ -5,14 +5,14 @@
 		var counters = {};
 		return {
 			increment: function (name) {
-				if (counters.hasOwnProperty(name)) {
+				if (Object.hasOwnProperty.call(counters, name)) {
 					counters[name]++;
 				} else {
 					counters[name] = 1;
 				}
 			},
 			decrement: function (name) {
-				if (counters.hasOwnProperty(name)) {
+				if (Object.hasOwnProperty.call(counters, name)) {
 					counters[name]--;
 					if (counters[name] === 0) {
 						delete counters[name];
@@ -20,14 +20,15 @@
 				}
 			},
 			isEmpty: function (name) {
-				return !(counters.hasOwnProperty(name) && counters[name] !== 0);
+				return !Object.hasOwnProperty.call(counters, name)
+					|| counters[name] === 0;
 			}
 		};
 	})();
 
 	var events = {
 		subscribe: function (name, callback) {
-			if (!callbacks.hasOwnProperty(name)) {
+			if (!Object.hasOwnProperty.call(callbacks, name)) {
 				callbacks[name] = [];
 			}
 			if (callbacks[name].indexOf(callback) === -1) {
@@ -35,7 +36,7 @@
 			}
 		},
 		unsubscribe: function (name, callback) {
-			if (callbacks.hasOwnProperty(name)) {
+			if (Object.hasOwnProperty.call(callbacks, name)) {
 				var position = callbacks[name].indexOf(callback);
 				if (position !== -1) {
 					if (iterators.isEmpty(name)) {
@@ -56,7 +57,7 @@
 		publish: function (name) {
 			var payload = Array.prototype.slice.call(arguments, 1);
 			console.log.apply(console, ["[Events]", name].concat(payload));
-			if (callbacks.hasOwnProperty(name)) {
+			if (Object.hasOwnProperty.call(callbacks, name)) {
 				// Count recursive publish/unsubscribe calls
 				iterators.increment(name);
 

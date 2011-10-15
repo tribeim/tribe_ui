@@ -46,12 +46,15 @@ function (events) {
 				case "string":
 				case "number":
 				case "boolean":
-					if (!target.hasOwnProperty(key)) {
+					if (!Object.hasOwnProperty.call(target, key)) {
 						target[key] = template[key];
 					}
 					break;
 				case "object":
-					if (!target.hasOwnProperty(key) || (template[key] instanceof Array && !(target[key] instanceof Array))) {
+					if (!Object.hasOwnProperty.call(target, key)
+						|| (template[key] instanceof Array
+							&& !(target[key] instanceof Array))
+					) {
 						target[key] = template[key] instanceof Array ? [] : {};
 					}
 					stubCopy(target[key], template[key]);

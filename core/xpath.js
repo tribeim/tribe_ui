@@ -69,7 +69,9 @@ define(function () {return function (node, xpath, type, xmlns) {
 	} else if (!(xmlns instanceof Function)) {
 		var _xmlns = xmlns;
 		xmlns = function (prefix) {
-			return _xmlns.hasOwnProperty(prefix) ? _xmlns[prefix] : null;
+			return Object.hasOwnProperty.call(_xmlns, prefix)
+				? _xmlns[prefix]
+				: null;
 		};
 	}
 

@@ -60,14 +60,18 @@
 			if (!rosterCache) {
 				loadFromStorage();
 			}
-			return Object.hasOwnProperty.call(rosterCache, jid) ? rosterCache[jid] : {version: "", contacts: {}};
+			return Object.hasOwnProperty.call(rosterCache, jid)
+				? rosterCache[jid]
+				: {version: "", contacts: {}};
 		},
 
 		version: function (jid) {
 			if (!rosterCache) {
 				loadFromStorage();
 			}
-			return Object.hasOwnProperty.call(rosterCache, jid) ? rosterCache[jid].version : "";
+			return Object.hasOwnProperty.call(rosterCache, jid)
+				? rosterCache[jid].version
+				: "";
 		}
 	};
 });

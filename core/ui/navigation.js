@@ -68,7 +68,7 @@
 		};
 
 		"title tooltip callback target url path".split(" ").forEach(function (key) {
-			if (descriptor.hasOwnProperty(key)) {
+			if (Object.hasOwnProperty.call(descriptor, key)) {
 				api[key] = descriptor[key];
 			}
 		});
