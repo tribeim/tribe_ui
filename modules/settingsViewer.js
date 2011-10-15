@@ -7,16 +7,22 @@ function (settings, events, content, navigation) {
 			output.removeChild(output.firstChild);
 		}
 		output.insertAdjacentText("beforeEnd",
-			Object.keys(settings).map(
-				function (key) {return JSON.stringify(settings[key], null, 2);}
-			).join("")
+			Object.keys(settings).map(function (key) {
+				return key === "session"
+					? ""
+					: (key + ": " + JSON.stringify(settings[key], null, 2));
+			}).join("\n")
 		);
 	};
 	new content({
 		path: /^settings/,
 		open: function (path, element) {
 			require(["core/template"], function (template) {
-				template({css: "modules/settingsViewer", source: "settingsViewer", container: element}, function () {
+				template({
+					css: "modules/settingsViewer",
+					source: "settingsViewer",
+					container: element
+				}, function () {
 					drawSettings();
 					events.subscribe("settings.change", drawSettings);
 				});
@@ -24,7 +30,6 @@ function (settings, events, content, navigation) {
 		},
 		close: function (path, element) {
 			events.unsubscribe("settings.change", drawSettings);
-			htmlContainer = null;
 			require(["core/css"], function (css) {
 				css.unload("core/settingsViewer");
 			});
