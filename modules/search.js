@@ -1,6 +1,6 @@
 ﻿define(
-["core/paths", "core/events", "core/ui", "core/css", "libraries/mustache", "text!templates/search.mustache"],
-function (paths, events, ui, css, mustache, searchTemplate) {
+["core/paths", "core/events", "core/ui/content", "core/css", "libraries/mustache", "text!templates/search.mustache"],
+function (paths, events, content, css, mustache, searchTemplate) {
 	css.load("modules/search");
 	document.querySelector("#menubar").insertAdjacentHTML("afterEnd", mustache.to_html(searchTemplate));
 	document.querySelector("#search").addEventListener("submit", function (event) {
@@ -26,7 +26,7 @@ function (paths, events, ui, css, mustache, searchTemplate) {
 			pendingElement.parentNode.removeChild(pendingElement);
 		}
 	};
-	new ui.content({
+	new content({
 		path: /^search/,
 		open: function (path, element) {
 			css.load("modules/searchPage");

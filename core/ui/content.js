@@ -1,29 +1,31 @@
-﻿define(["core/paths"], function (paths) {
-	var activeContent = null;
-	var close = function (content) {
-		var panel = document.querySelector("#content");
-		if (content === activeContent) {
-			if ("close" in content) {
-				content.close(panel);
+﻿define(["core/ui", "core/paths"], function (ui, paths) {
+	var activeContent = null,
+
+		close = function (content) {
+			var panel = document.querySelector("#content");
+			if (content === activeContent) {
+				if ("close" in content) {
+					content.close(panel);
+				}
+				while (panel.hasChildNodes()) {
+					panel.removeChild(panel.firstChild);
+				}
 			}
-			while (panel.hasChildNodes()) {
-				panel.removeChild(panel.firstChild);
+		},
+
+		open = function (path, content) {
+			var panel = document.querySelector("#content");
+			if (activeContent) {
+				close(activeContent);
+				activeContent = null;
 			}
-		}
-	};
-	var open = function (path, content) {
-		var panel = document.querySelector("#content");
-		if (activeContent) {
-			close(activeContent);
-			activeContent = null;
-		}
-		if (content) {
-			activeContent = content;
-			if ("open" in content) {
-				content.open(path, panel);
+			if (content) {
+				activeContent = content;
+				if ("open" in content) {
+					content.open(path, panel);
+				}
 			}
-		}
-	};
+		};
 
 	/*
 		descriptor: {

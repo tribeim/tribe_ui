@@ -1,7 +1,7 @@
 ﻿define(
-["core/ui"],
-function (ui) {
-	new ui.content({
+["core/ui/content"],
+function (content) {
+	new content({
 		path: /^$/,
 		open: function (path, element) {
 			require(["core/template"], function (template) {

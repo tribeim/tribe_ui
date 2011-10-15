@@ -1,4 +1,4 @@
-﻿define(function () {
+﻿define(["core/ui"], function (ui) {
 	/*
 		descriptor: {
 			title: String|Element,
@@ -6,22 +6,21 @@
 		}
 	*/
 	return function (descriptor) {
-		var gadget = {};
-		var container = document.createElement("li");
-		var headerElement = container.appendChild(document.createElement("h1"));
-		var contentElement = container.appendChild(document.createElement("section"));
-		document.querySelector("#gadgets menu").appendChild(container);
+		var gadget = {},
+			container = document.createElement("li"),
+			headerElement = container.appendChild(document.createElement("h1")),
+			contentElement = container.appendChild(document.createElement("section")),
 
-		var setValue = function (element, value) {
-			if (typeof value === "string") {
-				element.textContent = value;
-			} else {
-				while (element.hasChildNodes()) {
-					element.removeChild(element.firstChild);
+			setValue = function (element, value) {
+				if (typeof value === "string") {
+					element.textContent = value;
+				} else {
+					while (element.hasChildNodes()) {
+						element.removeChild(element.firstChild);
+					}
+					element.appendChild(value);
 				}
-				element.appendChild(value);
-			}
-		};
+			};
 
 		var api = {
 			get title () {return headerElement},
@@ -34,6 +33,8 @@
 				setValue(contentElement, content || "");
 			}
 		};
+
+		document.querySelector("#gadgets menu").appendChild(container);
 
 		"title content".split(" ").forEach(function (key) {
 			if (descriptor.hasOwnProperty(key)) {

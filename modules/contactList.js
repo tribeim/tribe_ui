@@ -1,6 +1,6 @@
 ﻿define(
-["core/events", "core/ui", "modules/roster", "core/template", "core/settings"],
-function (events, ui, roster, template, settings) {
+["core/events", "core/ui/dock", "modules/roster", "core/template", "core/settings"],
+function (events, dock, roster, template, settings) {
 	settings({contactList: {
 		visible: false
 	}});
@@ -26,7 +26,7 @@ function (events, ui, roster, template, settings) {
 			groupHtml.appendChild(document.createElement("header"));
 			groupHtml.appendChild(document.createElement("ul"));
 			htmlCache[group] = {html: groupHtml, contacts: {}};
-			dock.content.querySelector("ul").insertAdjacentElement("beforeEnd", groupHtml);
+			widget.content.querySelector("ul").insertAdjacentElement("beforeEnd", groupHtml);
 		}
 		return htmlCache[group];
 	};
@@ -77,21 +77,21 @@ function (events, ui, roster, template, settings) {
 		}
 	};
 
-	var dock = new ui.dock({
+	var widget = new dock({
 		title: "Contacts",
 		sticky: true,
 		close: false,
 		visible: settings.contactList.visible,
 		events: {
-			toggle: function (dock) {
-				settings.contactList.visible = dock.visible;
+			toggle: function (widget) {
+				settings.contactList.visible = widget.visible;
 			}
 		}
 	});
-	template({css: "modules/contactList", source: "contactList", container: dock.content});
+	template({css: "modules/contactList", source: "contactList", container: widget.content});
 
 	events.subscribe("roster.change", function (changedContacts) {
-		dock.content.querySelector("p").classList.add("hide");
+		widget.content.querySelector("p").classList.add("hide");
 		var groupsToUpdate = {};
 		Object.keys(changedContacts).forEach(function (jid) {
 			var resources = Object.keys(changedContacts[jid].resources).map(function (resource) {

@@ -1,4 +1,4 @@
-﻿define(function () {
+﻿define(["core/ui"], function (ui) {
 	/*
 		descriptor: {
 			title: "",
@@ -10,13 +10,14 @@
 		}
 	*/
 	return function (descriptor) {
-		var navigation = {};
-		var container = document.createElement("li");
-		var anchor = document.createElement("a");
-		var clickHandler = function (event) {
-			event.preventDefault();
-			navigation.callback();
-		};
+		var navigation = {},
+			container = document.createElement("li"),
+			anchor = document.createElement("a"),
+
+			clickHandler = function (event) {
+				event.preventDefault();
+				navigation.callback();
+			};
 
 		var api = {
 			get title () {return navigation.title},
@@ -40,7 +41,10 @@
 			get url () {return navigation.url},
 			set url (url) {
 				delete navigation.path;
-				anchor.target = navigation.target = ((typeof navigation.target === "string") ? navigation.target : "_blank");
+				anchor.target = navigation.target =
+					((typeof navigation.target === "string")
+						? navigation.target
+						: "_blank");
 				anchor.href = (navigation.url = url) || "";
 			},
 

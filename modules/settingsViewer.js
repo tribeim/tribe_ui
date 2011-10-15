@@ -1,6 +1,6 @@
 ﻿define(
-["core/settings", "core/events", "core/ui"],
-function (settings, events, ui) {
+["core/settings", "core/events", "core/ui/content", "core/ui/navigation"],
+function (settings, events, content, navigation) {
 	var drawSettings = function () {
 		var output = document.querySelector("#settings-viewer");
 		while (output.hasChildNodes()) {
@@ -12,7 +12,7 @@ function (settings, events, ui) {
 			).join("")
 		);
 	};
-	new ui.content({
+	new content({
 		path: /^settings/,
 		open: function (path, element) {
 			require(["core/template"], function (template) {
@@ -30,7 +30,7 @@ function (settings, events, ui) {
 			});
 		}
 	});
-	new ui.navigation({
+	new navigation({
 		title: "Settings",
 		path: "settings"
 	});

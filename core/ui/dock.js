@@ -1,27 +1,30 @@
 ﻿define(
-["core/css", "libraries/mustache", "text!templates/dock.mustache"],
-function (css, mustache, dockTemplate) {
+["core/ui", "core/css", "libraries/mustache", "text!templates/dock.mustache"],
+function (ui, css, mustache, dockTemplate) {
 	var setValue = function (element, value) {
-		if (typeof value === "string") {
-			element.textContent = value;
-		} else {
-			while (element.hasChildNodes()) {
-				element.removeChild(element.firstChild);
+			if (typeof value === "string") {
+				element.textContent = value;
+			} else {
+				while (element.hasChildNodes()) {
+					element.removeChild(element.firstChild);
+				}
+				element.appendChild(value);
 			}
-			element.appendChild(value);
-		}
-	};
-	var defaults = {
-		active: false,
-		visible: true,
-		close: true,
-		toggle: true,
-		sticky: false,
-		position: -1,
-		title: "",
-		content: ""
-	};
-	var docklets = [];
+		},
+
+		defaults = {
+			active: false,
+			visible: true,
+			close: true,
+			toggle: true,
+			sticky: false,
+			position: -1,
+			title: "",
+			content: ""
+		},
+
+		docklets = [];
+
 	/*
 		descriptor: {
 			active: Boolean,

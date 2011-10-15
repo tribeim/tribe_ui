@@ -1,12 +1,9 @@
 ﻿define(
-["core/ui/navigation", "core/ui/gadget", "core/ui/content", "core/ui/dock",
-"core/paths", "core/css", "libraries/mustache", "text!templates/ui.mustache"],
-function (  navigation, gadget, content, dock,
-			paths, css, mustache, uiTemplate) {
+["core/paths", "core/css", "libraries/mustache", "text!templates/ui.mustache"],
+function (paths, css, mustache, uiTemplate) {
 
 	css.load("core/ui");
 	document.body.insertAdjacentHTML("beforeEnd", mustache.to_html(uiTemplate));
-	var activeContentCreator = null;
 
 	document.body.addEventListener("click", function (event) {
 		if (event.target.tagName === "A") {
@@ -18,10 +15,5 @@ function (  navigation, gadget, content, dock,
 		}
 	}, false);
 
-	return {
-		navigation: navigation,
-		gadget: gadget,
-		content: content,
-		dock: dock
-	};
+	return {};
 });

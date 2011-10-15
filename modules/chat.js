@@ -1,6 +1,6 @@
 ﻿define(
-["core/ui", "modules/roster", "core/xmpp"],
-function (ui, roster, xmpp) {
+["core/ui/content", "modules/roster", "core/xmpp"],
+function (content, roster, xmpp) {
 	var $xml = function (snippet) {
 		return (new DOMParser).parseFromString(snippet, "text/xml").documentElement;
 	};
@@ -32,7 +32,7 @@ function (ui, roster, xmpp) {
 		}
 	};
 
-	new ui.content({
+	new content({
 		path: /^chat\/?([^\/]*)/,
 		open: function (path, element) {
 			var jid = path.match(/^chat\/?([^\/]*)/)[1];
