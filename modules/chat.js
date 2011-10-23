@@ -38,8 +38,17 @@ function (content, roster, xmpp) {
 			var jid = path.match(/^chat\/?([^\/]*)/)[1];
 			var name = jid in roster ? roster[jid].name : jid;
 			require(["core/template"], function (template) {
-				template({css: "modules/chat", source: "chat", container: element, data: {name: name, jid: jid}}, function () {
-					element.querySelector("#chatcomposer").addEventListener("submit", function () {submitComposer(jid)}, false);
+				template({
+					css: "modules/chat",
+					source: "chat",
+					container: element,
+					data: {name: name, jid: jid}
+				})
+				.then(function () {
+					element.querySelector("#chatcomposer")
+						.addEventListener("submit", function () {
+							submitComposer(jid);
+						}, false);
 					xmpp.subscribe(xmppMessageHandler);
 				});
 			});

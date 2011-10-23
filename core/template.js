@@ -70,34 +70,43 @@
  *		(String) html - The parsed HTML output from the template.
  *		(Element) container - The HTML element that received the HTML output.
  */
-define(function () {
+define(
+["core/promise", "core/css", "libraries/mustache"],
+function (promise, css, mustache) {
 	return function (settings, callback) {
-		if ("css" in settings) {
-			require(["core/css"], function (css) {
-				css.load(settings.css);
-			});
-		}
-		if ("source" in settings) {
-			if (settings.source.substr(settings.source.length - 9) !== ".html") {
-				settings.source += ".html";
+		return new promise(function (templateDeferred) {
+			var ready = new promise(),
+				rawHtml = "";
+			if ("css" in settings) {
+				ready.when(css.load(settings.css));
 			}
-			require(
-				["libraries/mustache", "text!templates/" + settings.source],
-				function (mustache, source) {
-					var html = mustache.to_html(source, settings.data);
-					if ("container" in settings) {
-						if (typeof settings.container === "string") {
-							settings.container = document.querySelector(settings.container);
-						}
-						if (settings.container) {
-							settings.container.insertAdjacentHTML(("position" in settings) ? settings.position : "beforeEnd", html);
-						}
+			if ("source" in settings) {
+				ready.when(new promise(function (sourceDeferred) {
+					var extension = ".html",
+						file = settings.source;
+					if (file.substr(file.length - extension.length) !== extension) {
+						file += extension;
 					}
-					if (callback instanceof Function) {
-						callback(html, settings.container);
+					require(["text!templates/" + file], function (source) {
+						rawHtml = source;
+						console.log("template source done");
+						sourceDeferred.done();
+					});
+				}));
+			}
+			ready.then(function () {
+				var html = mustache.to_html(rawHtml, settings.data),
+					where = "position" in settings ? settings.position : "beforeEnd";
+				if ("container" in settings) {
+					if (typeof settings.container === "string") {
+						settings.container = document.querySelector(settings.container);
+					}
+					if (settings.container) {
+						settings.container.insertAdjacentHTML(where, html);
 					}
 				}
-			);
-		}
-	}
+				templateDeferred.done(html, settings.container);
+			});
+		});
+	};
 });

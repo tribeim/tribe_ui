@@ -95,7 +95,8 @@
 	});
 
 	events.subscribe("app.ready", function () {
-		template({css: "core/signin", source: "signin", container: "body"}, function (html, container) {
+		template({css: "core/signin", source: "signin", container: "body"})
+		.then(function (html, container) {
 			if (settings.session.remember === true
 				&& settings.session.address.length > 0
 				&& settings.session.password.length > 0

@@ -71,7 +71,7 @@ function (events, xmpp, xpath, rosterCache, jidParser) {
 		 *  Example:
 		 *	(code)
 		 *	"user@server": {
-		 *		subscription: "none|to|from|both",
+		 *		subscription: "both",
 		 *		ask: "subscribe",
 		 *		name: "Some User",
 		 *		groups: [
@@ -91,6 +91,7 @@ function (events, xmpp, xpath, rosterCache, jidParser) {
 		 *  Contains the information of a single contact.
 		 *
 		 *  Properties:
+		 *  (String) jid - The bare address of the contact.
 		 *  (String) subscription - Subscription state of the contact. Values: *both*, *from*, *none*, *remove*, *to*
 		 *  (String) ask - Whether the contact is pending approval. Values: *subscribe* or an empty string
 		 *  (String) name - Name of the contact in the roster.
@@ -131,6 +132,7 @@ function (events, xmpp, xpath, rosterCache, jidParser) {
 			xmpp.subscribe(rosterIQHandler);
 			xmpp.subscribe(presenceHandler);
 			events.publish("roster.ready");
+			xmpp.send($xml("<presence/>"));
 		});
 		events.subscribe("xmpp.disconnected", onDisconnected);
 	};
@@ -181,7 +183,7 @@ function (events, xmpp, xpath, rosterCache, jidParser) {
 		// Removed contact
 		Object.keys(oldContacts).forEach(function (jid) {
 			if (!Object.hasOwnProperty.call(newContacts, jid)) {
-				changedContacts[jid] = {subscription: "remove"};
+				changedContacts[jid] = {jid: jid, subscription: "remove"};
 			}
 		});
 		return changedContacts;
@@ -206,18 +208,30 @@ function (events, xmpp, xpath, rosterCache, jidParser) {
 							resource[tagName] = tag ? tag.textContent : "";
 						});
 						resource.priority = parseInt(resource.priority, 10);
-						if (isNaN(resource.priority) ||
-							resource.priority < -128 ||
-							resource.priority > 127
+						if (isNaN(resource.priority)
+							|| resource.priority < -128
+							|| resource.priority > 127
 						) {
 							resource.priority = 0;
 						}
-						events.publish("roster.available", presence, jid.bare, jid.resource, resource);
+						events.publish(
+							"roster.available",
+							presence,
+							jid.bare,
+							jid.resource,
+							resource
+						);
 						break;
 					case "unavailable":
 						delete contact.resources[jid.resource];
 						var status = xpath(presence, "/client:presence/status", Object, xmlns);
-						events.publish("roster.unavailable", presence, jid.bare, jid.resource, status ? status.textContent : "");
+						events.publish(
+							"roster.unavailable",
+							presence,
+							jid.bare,
+							jid.resource,
+							status ? status.textContent : ""
+						);
 						break;
 					case "subscribe":
 					case "subscribed":
@@ -252,7 +266,7 @@ function (events, xmpp, xpath, rosterCache, jidParser) {
 		xpath(iq, "/client:iq/roster:query/roster:item", Array, xmlns).forEach(function (item) {
 			var jid = item.getAttribute("jid")
 			if (jid) {
-				var contact = {};
+				var contact = {jid: jid};
 				["name", "ask", "subscription"].forEach(function (property) {
 					contact[property] = item.getAttribute(property) || "";
 				});

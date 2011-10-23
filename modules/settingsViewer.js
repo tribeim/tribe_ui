@@ -22,7 +22,8 @@ function (settings, events, content, navigation) {
 					css: "modules/settingsViewer",
 					source: "settingsViewer",
 					container: element
-				}, function () {
+				})
+				.then(function () {
 					drawSettings();
 					events.subscribe("settings.change", drawSettings);
 				});
