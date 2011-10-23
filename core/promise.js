@@ -3,14 +3,14 @@ define(function () {
 		var callbacks = [],
 			promises = [],
 			pending = 0,
-			unique = parseInt(Math.random() * 1000000),
+			//unique = parseInt(Math.random() * 1000000),
 			deferred = {
 				done: function () {
-					console.log("promise", unique, "done", pending);
+					//console.log("promise", unique, "done", pending);
 					var payload = arguments;
 					pending--;
 					if (pending <= 0) {
-						console.log("promise", unique, "FEUER FREI!", pending);
+						//console.log("promise", unique, "FEUER FREI!", pending);
 						callbacks.forEach(function (callback) {
 							callback.apply(this, payload);
 						});
@@ -24,7 +24,7 @@ define(function () {
 		}
 		return {
 			when: function (promise) {
-				console.log("promise", unique, "when", pending);
+				//console.log("promise", unique, "when", pending);
 				if (promises.indexOf(promise) === -1) {
 					promises.push(promise);
 					pending++;
@@ -33,7 +33,7 @@ define(function () {
 				return this;
 			},
 			then: function (success /* , failure, progress */ ) { // TODO
-				console.log("promise", unique, "then", pending);
+				//console.log("promise", unique, "then", pending);
 				if (callbacks.indexOf(success) === -1) {
 					callbacks.push(success);
 				}
