@@ -77,6 +77,39 @@ function (events, dock, roster, template, settings) {
 		}
 	};
 
+	var updateContact = function (group, contact) {
+		var cachedContact = getContactFromCache(group, contact.jid);
+		while (cachedContact.hasChildNodes()) {
+			cachedContact.removeChild(cachedContact.firstChild);
+		}
+		var resources = Object.keys(contact.resources)
+				.map(function (resource) {
+					var res = contact.resources[resource];
+					return {
+						jid: contact.jid,
+						priority: res.priority,
+						resource: resource,
+						show: res.show,
+						status: res.status
+					};
+				})
+				.sort(function (a, b) {
+					return b.priority - a.priority;
+				});
+		template({
+			container: cachedContact,
+			source: "contactListItem",
+			data: {
+				jid: contact.jid,
+				name: contact.name,
+				ask: contact.ask,
+				subscription: contact.subscription,
+				resource: resources.length > 0 ? resources[0] : undefined,
+				resources: resources
+			}
+		});
+	};
+
 	var widget = new dock({
 		title: "Contacts",
 		sticky: true,
@@ -88,54 +121,50 @@ function (events, dock, roster, template, settings) {
 			}
 		}
 	});
-	template({css: "modules/contactList", source: "contactList", container: widget.content});
+	template({
+		css: "modules/contactList",
+		source: "contactList",
+		container: widget.content
+	});
 
 	events.subscribe("roster.change", function (changedContacts) {
 		widget.content.querySelector("p").classList.add("hide");
 		var groupsToUpdate = {};
 		Object.keys(changedContacts).forEach(function (jid) {
-			var resources = Object.keys(changedContacts[jid].resources).map(function (resource) {
-				var res = changedContacts[jid].resources[resource];
-				return {
-					jid: jid,
-					priority: res.priority,
-					resource: resource,
-					show: res.show,
-					status: res.status
-				};
-			}).sort(function (a, b) {
-				return b.priority - a.priority;
-			});
 			// Remove from old groups
 			Object.keys(htmlCache).filter(function (group) {
-				return Object.hasOwnProperty.call(htmlCache[group], jid) &&
-					(changedContacts[jid].groups.indexOf(group) === -1);
+				return Object.hasOwnProperty.call(htmlCache[group], jid)
+					&& changedContacts[jid].groups.indexOf(group) === -1;
 			}).forEach(function (group) {
 				removeContactFromCache(group, jid);
 			});
 			// Update new groups
-			((changedContacts[jid].groups.length > 0) ? changedContacts[jid].groups : ["Other Contacts"])
+			(changedContacts[jid].groups.length > 0
+				? changedContacts[jid].groups
+				: ["Other Contacts"])
 			.forEach(function (group) {
 				groupsToUpdate[group] = true;
-				var cachedContact = getContactFromCache(group, jid);
-				while (cachedContact.hasChildNodes()) {
-					cachedContact.removeChild(cachedContact.firstChild);
-				}
-				template({
-					container: cachedContact,
-					source: "contactListItem",
-					data: {
-						jid: jid,
-						name: changedContacts[jid].name,
-						ask: changedContacts[jid].ask,
-						subscription: changedContacts[jid].subscription,
-						resource: resources.length > 0 ? resources[0] : undefined,
-						resources: resources
-					}
-				});
+				updateContact(group, changedContacts[jid]);
 			});
 		});
 		Object.keys(groupsToUpdate).forEach(updateGroupHeader);
+		return true;
+	});
+
+	events.subscribe("roster.available", function (presence, jid, resource, rosterResource) {
+		return true;
+		var contact = roster[jid];
+		(contact.groups.length > 0
+			? contact.groups
+			: ["Other Contacts"])
+		.forEach(function (group) {
+			updateContact(group, contact);
+		});
+		return true;
+	});
+
+	events.subscribe("roster.unavailable", function (presence, jid, resource, status) {
+		return true;
 	});
 
 	return {};
