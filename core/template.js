@@ -89,7 +89,6 @@ function (promise, css, mustache) {
 					}
 					require(["text!templates/" + file], function (source) {
 						rawHtml = source;
-						console.log("template source done");
 						sourceDeferred.done();
 					});
 				}));

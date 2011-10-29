@@ -27,12 +27,10 @@
 					stylesheets[file] = link;
 					document.getElementsByTagName("head")[0].appendChild(link);
 					// Load event workaround
-					console.log("css load", theme + file);
 					var img = document.createElement('img');
 					img.src = theme + file;
 					img.style.display = "none";
 					img.addEventListener("error", function () {
-						console.log("css done", theme + file);
 						document.body.removeChild(img);
 						deferred.done();
 					}, false);
