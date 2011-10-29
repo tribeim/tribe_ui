@@ -8,19 +8,14 @@
 		<script src="libraries/require.js"></script>
 		<script>
 			// <![CDATA[
-			//require.ready(function () {
-			//	require({baseUrl: ""}, ["core/app"]);
-			//});
 			require.config({
-			  baseUrl: "/",
-			  paths: {
-			    "text": "/libraries/text", // required plugin
-			  }
+				baseUrl: "/",
+				paths: {
+					// required plugin
+					"text": "/libraries/text",
+				}
 			});
-			require(["core/app"], function() {
-          //This function is called when scripts/helper/util.js is loaded.
-          console.log("deps loaded.");
-      });
+			require(["core/app"]);
 			// ]]>
 		</script>
 	</head>
