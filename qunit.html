@@ -3,19 +3,25 @@
 	<head>
 		<meta charset="utf-8" />
 		<title>QUnit Test Suite</title>
-		<link rel="stylesheet" href="http://github.com/jquery/qunit/raw/master/qunit/qunit.css" type="text/css" media="screen" />
-		<script src="http://github.com/jquery/qunit/raw/master/qunit/qunit.js"></script>
+		<link rel="stylesheet" href="qunit/qunit/qunit.css" />
+		<script src="qunit/qunit/qunit.js"></script>
 		<script src="libraries/require.js"></script>
 		<script>
 			// <![CDATA[
-			require.ready(function () {
-				require({baseUrl: "."}, [
-					"libraries/polyfill",
-					"tests/core/events",
-					"tests/core/settings",
-					"tests/core/xpath"
-				]);
+			require.config({
+				baseUrl: "/",
+				paths: {
+					// required plugin
+					"text": "/libraries/text"
+				}
 			});
+			require([
+				"libraries/polyfill",
+				"tests/core/events",
+				"tests/core/settings",
+				"tests/core/xpath",
+				"tests/core/promise"
+			]);
 			// ]]>
 		</script>
 	</head>
