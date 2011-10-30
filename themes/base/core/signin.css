@@ -12,24 +12,25 @@
 		-moz-radial-gradient(circle, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.75)),
 		url(../images/mushroom.jpg);
 }
-#signin article {
-	/*background-color: white;
-	border: 10px solid silver;*/
+#signin > article {
 	margin: 2em auto;
 	padding: 20px;
+	text-align: center;
 	width: 400px;
 }
-#signin h1 {
+#signin > article > h1 {
 	background: no-repeat url(../images/logo.png);
 	height: 169px;
-	margin: 10px 0 30px -120px;
+	margin: 10px 0 30px -40px;
 	width: 467px;
-	/*font-size: 1.5em;
-	margin: 0.25em 0 1em 0;*/
 	/* Malarkey Image Replacement */
 	letter-spacing: normal;
 	text-indent: -9999px;
 	overflow: hidden;
+}
+#signin > article > form {
+	display: inline-block;
+	text-align: left;
 }
 #signin-credentials .warn {
 	margin-bottom: 1.5em;
@@ -39,7 +40,9 @@
 }
 #signin label {
 	color: #e0e0e0;
-	text-shadow: #000 2px 1px 2px;
+	text-shadow:
+		#000 2px 1px 1px,
+		#fff 1px 1px 1px;
 }
 #signin label.pre {
 	display: none;
@@ -71,15 +74,9 @@
 	display: inline-block;
 	width: auto;
 }
-/*
-#signin input[type="checkbox"] {
-	margin-left: 8.25em;
-}
-*/
 #signin input[type="submit"] {
 	font-size: 1.1em;
 	font-weight: bold;
-	/*margin: 1em 0 0 7em;*/
 	margin: 1em 0 0 3em;
 	padding: 0.15em 2.5em;
 }
