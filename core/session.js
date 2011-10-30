@@ -50,7 +50,6 @@ function (events, settings, css, template) {
 			showPanel("#signin-connecting");
 			$("#signin-connecting form").addEventListener("submit", function (event) {
 				event.preventDefault();
-				settings.session.remember = true;
 				settings.session.address = "";
 				settings.session.password = "";
 				events.publish("session.cancelSignin");
