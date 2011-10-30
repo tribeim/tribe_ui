@@ -1,4 +1,6 @@
-﻿define(["core/events", "core/settings", "core/css", "core/template"], function (events, settings, css, template) {
+﻿define(
+["core/events", "core/settings", "core/css", "core/template"],
+function (events, settings, css, template) {
 	var $ = document.querySelector.bind(document),
 		$$ = function () {return Array.prototype.slice.call(document.querySelectorAll.apply(document, arguments));},
 
@@ -46,8 +48,11 @@
 
 		doSignin = function (address, password) {
 			showPanel("#signin-connecting");
-			$("#signin-cancel").addEventListener("click", function (event) {
+			$("#signin-connecting form").addEventListener("submit", function (event) {
 				event.preventDefault();
+				settings.session.remember = true;
+				settings.session.address = "";
+				settings.session.password = "";
 				events.publish("session.cancelSignin");
 			}, false);
 
