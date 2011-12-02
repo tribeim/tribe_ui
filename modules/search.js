@@ -18,7 +18,7 @@ function (paths, events, content, css, mustache, searchTemplate) {
 				resultsElement.insertAdjacentHTML("beforeEnd", html);
 			}
 		});
-		return true; // keep listening for more results
+		return true;
 	};
 	var clearPending = function () {
 		var pendingElement = document.querySelector("#search-results-waiting");

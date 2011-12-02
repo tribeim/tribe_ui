@@ -8,6 +8,7 @@
 				events.publish("search.results", payload);
 			}
 		);
+		return true;
 	});
 	return {};
 });
