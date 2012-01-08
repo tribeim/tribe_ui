@@ -1,0 +1,34 @@
+{
+	"name": "tribe_ui",
+	"version": "1.0.0",
+	"description": "The Tribe.im client application",
+	"homepage": "http://tribe.im/",
+	"maintainers": [
+		{
+			"name": "Sebastiaan Deckers",
+			"email": "sebdeckers83@gmail.com"
+		}
+	],
+	"licenses": [
+		{
+			"type": "GPLv3+",
+			"url": "http://www.gnu.org/licenses/gpl-3.0.html"
+		}
+	],
+	"repositories": [
+		{
+			"type": "git",
+			"url": "git://github.com/tribeim/tribe_ui.git"
+		}
+	],
+	"engines": {
+		"node": "~0.6.5"
+	},
+	"dependencies": {},
+	"devDependencies": {
+		"qunit": "latest"
+	},
+	"scripts": {
+		"test": "qunit testrunner.js"
+	}
+}
