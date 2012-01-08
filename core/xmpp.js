@@ -224,43 +224,45 @@
 
 	var connect = function (address, password) {
 		require(["libraries/strophe.js"], function () {
-			var boshUrl = "/http-bind";
+			var boshUrl = "/http-bind",
+				stropheHandler = function (status) {
+					console.log(arguments);
+					switch (status) {
+						case Strophe.Status.ATTACHED:
+							break;
+						case Strophe.Status.AUTHENTICATING:
+							break;
+						case Strophe.Status.CONNECTED:
+							stream.connection.status = "connected";
+							/* Flush outgoing stanza buffer when (re-)connecting */
+							while (stanzaSendQueue.length > 0) {
+								stream.send(stanzaSendQueue.shift());
+							}
+							events.publish("xmpp.connected");
+							break;
+						case Strophe.Status.CONNECTING:
+							stream.connection.status = "connecting";
+							events.publish("xmpp.connecting");
+							break;
+						case Strophe.Status.CONNFAIL:
+						case Strophe.Status.AUTHFAIL:
+						case Strophe.Status.DISCONNECTED:
+							stropheConnection = null;
+							stream.connection.status = "disconnected";
+							events.publish("xmpp.disconnected");
+							break;
+						case Strophe.Status.DISCONNECTING:
+							break;
+						case Strophe.Status.ERROR:
+							break;
+					}
+				};
 			// Raw Strophe debugging
 			//Strophe.log = function () {console.log.apply(console, arguments)};
 			stropheConnection = new Strophe.Connection(boshUrl);
 			stropheConnection.xmlInput = onStropheStanzaReceive;
 			stropheConnection.xmlOutput = onStropheStanzaSend;
-			stropheConnection.connect(address, password, function (status) {
-				switch (status) {
-					case Strophe.Status.ATTACHED:
-						break;
-					case Strophe.Status.AUTHENTICATING:
-						break;
-					case Strophe.Status.CONNECTED:
-						stream.connection.status = "connected";
-						/* Flush outgoing stanza buffer when (re-)connecting */
-						while (stanzaSendQueue.length > 0) {
-							stream.send(stanzaSendQueue.shift());
-						}
-						events.publish("xmpp.connected");
-						break;
-					case Strophe.Status.CONNECTING:
-						stream.connection.status = "connecting";
-						events.publish("xmpp.connecting");
-						break;
-					case Strophe.Status.CONNFAIL:
-					case Strophe.Status.AUTHFAIL:
-					case Strophe.Status.DISCONNECTED:
-						stropheConnection = null;
-						stream.connection.status = "disconnected";
-						events.publish("xmpp.disconnected");
-						break;
-					case Strophe.Status.DISCONNECTING:
-						break;
-					case Strophe.Status.ERROR:
-						break;
-				}
-			});
+			stropheConnection.connect(address, password, stropheHandler);
 		});
 	};
 
